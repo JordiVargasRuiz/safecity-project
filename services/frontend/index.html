@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCity Pro - Centro de Comando</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); }
+        #map { height: 100%; width: 100%; background-color: #0b0f1a; }
+    </style>
+    <link rel="icon" href="data:,">
+</head>
+<body class="bg-[#0b0f1a] text-slate-200 font-sans h-screen flex flex-col overflow-hidden">
+
+    <header class="h-16 border-b border-slate-800 glass-panel px-6 flex justify-between items-center z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                <span class="text-white font-bold text-xl">S</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white">SAFECITY <span class="text-cyan-400 text-xs ml-1">v2.6</span></h1>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest">CUCEI - Enterprise Monitoring</p>
+            </div>
+        </div>
+        <div class="text-slate-500 text-xs font-mono" id="clock">--:--:--</div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden">
+        <aside class="w-80 border-r border-slate-800 flex flex-col glass-panel">
+            <div class="p-5 border-b border-slate-800">
+                <h2 class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-4">Emitir Alerta Real</h2>
+                <div class="space-y-4">
+                    <select id="tipo" class="w-full bg-slate-900 border border-slate-700 rounded-md p-2 text-sm outline-none focus:border-cyan-500">
+                        <option value="Robo">🚨 Robo / Asalto</option>
+                        <option value="Accidente">🚑 Accidente Vial</option>
+                        <option value="Vandalismo">🎨 Vandalismo</option>
+                    </select>
+                    <input id="ubicacion" type="text" placeholder="Ej. CUCEI, Guadalajara" class="w-full bg-slate-900 border border-slate-700 rounded-md p-2 text-sm outline-none">
+                    <button onclick="enviarAlerta()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2.5 rounded-md text-xs font-bold uppercase transition-all">Transmitir</button>
+                </div>
+            </div>
+            <div id="incident-feed" class="flex-1 p-5 overflow-y-auto space-y-3">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Historial Reciente</h2>
+            </div>
+        </aside>
+
+        <section class="flex-1 relative">
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <script>
+        const API_BACKEND = 'http://localhost:81/alerts';
+        let map;
+        let infoWindow;
+
+        const darkStyle = [
+            { "elementType": "geometry", "stylers": [{ "color": "#242f3e" }] },
+            { "elementType": "labels.text.stroke", "stylers": [{ "color": "#242f3e" }] },
+            { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#38414e" }] },
+            { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#17263c" }] }
+        ];
+
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        async function initMap() {
+            const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            infoWindow = new InfoWindow();
+            map = new Map(document.getElementById("map"), {
+                center: { lat: 20.6644, lng: -103.3248 },
+                zoom: 15,
+                styles: darkStyle,
+                mapId: "DEMO_MAP_ID",
+                mapTypeControl: false
+            });
+
+            console.log("Mapa cargado con éxito.");
+            cargarHistorial();
+        }
+
+        async function agregarMarcador(lat, lng, titulo, subtitulo) {
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+            
+            const marker = new AdvancedMarkerElement({
+                map: map,
+                position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+                title: titulo
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.setContent(`<div class="p-2 text-slate-900"><b>${titulo}</b><br>${subtitulo}</div>`);
+                infoWindow.open(map, marker);
+            });
+        }
+
+
+        async function cargarHistorial() {
+    try {
+        console.log("Solicitando historial al backend...");
+        const res = await fetch('http://localhost:81/alerts');
+        const alertas = await res.json();
+        
+        const feed = document.getElementById('incident-feed');
+        if (!feed) return;
+        
+        feed.innerHTML = "";
+
+        if (Array.isArray(alertas) && alertas.length > 0) {
+            alertas.forEach(async (a) => {
+  
+                try {
+                    if (a.lat && a.lon) {
+                        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+                        const marker = new AdvancedMarkerElement({
+                            map: map,
+                            position: { lat: parseFloat(a.lat), lng: parseFloat(a.lon) },
+                            title: a.tipo
+                        });
+                        
+                        marker.addListener('gmp-click', () => {
+                            infoWindow.setContent(`<div class="p-2 text-slate-900"><b>${a.tipo}</b><br>${a.ubicacion}</div>`);
+                            infoWindow.open(map, marker);
+                        });
+                    }
+                } catch (err) {
+                    console.error("Error al colocar un marcador individual:", err);
+                }
+                
+                const item = document.createElement('div');
+                item.className = "bg-slate-900/80 border-l-2 border-cyan-500 p-3 rounded-r-md cursor-pointer hover:bg-slate-800 transition-all mb-3";
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-[10px] font-bold text-cyan-400 uppercase">${a.tipo}</span>
+                        <span class="text-[9px] text-slate-500">${a.fecha}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 font-medium">${a.ubicacion}</p>
+                `;
+                
+                if(a.lat && a.lon) {
+                    item.onclick = () => map.panTo({lat: parseFloat(a.lat), lng: parseFloat(a.lon)});
+                }
+                
+                feed.appendChild(item);
+            });
+        } else {
+            feed.innerHTML = '<p class="text-slate-500 text-xs italic">No hay reportes previos.</p>';
+        }
+    } catch (e) { 
+        console.error("Error crítico cargando historial:", e);
+        document.getElementById('incident-feed').innerHTML = '<p class="text-red-400 text-xs italic">Error al conectar con el servidor.</p>';
+    }
+}
+
+        async function enviarAlerta() {
+            const tipo = document.getElementById('tipo').value;
+            const ubicacion = document.getElementById('ubicacion').value;
+            if(!ubicacion) return;
+
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: ubicacion + ", Guadalajara" }, async (results, status) => {
+                if (status === "OK") {
+                    const lat = results[0].geometry.location.lat();
+                    const lon = results[0].geometry.location.lng();
+
+                    await fetch(API_BACKEND, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer token-seguro-safecity-2026' 
+                        },
+                        body: JSON.stringify({ tipo, ubicacion, lat, lon })
+                    });
+                    
+                    agregarMarcador(lat, lon, tipo, ubicacion);
+                    map.panTo({lat, lng: lon});
+                    cargarHistorial();
+                }
+            });
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIEFQof0In0Gh8nT60zZt6p2jBrM1fHOs&callback=initMap" async defer></script>
+</body>
+</html>

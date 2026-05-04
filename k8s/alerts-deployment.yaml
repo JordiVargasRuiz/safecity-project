@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerts-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alerts
+  template:
+    metadata:
+      labels:
+        app: alerts
+    spec:
+      containers:
+      - name: alerts
+        image: alerts-service:v5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alerts-entrypoint
+spec:
+  selector:
+    app: alerts
+  ports:
+    - protocol: TCP
+      port: 81 
+      targetPort: 8000
+  type: LoadBalancer
