@@ -477,7 +477,7 @@ Las contribuciones son bienvenidas. Por favor:
 - **Universidad de Guadalajara**
 
 ### Contacto
-- 📧 Email: safecity@cucei.udg.mx
+- 📧 Email: jordi.vargas3669@alumnos.udg.mx
 - 🔗 Repositorio: [github.com/JordiVargasRuiz/safecity-project](https://github.com)
 - 📱 Issues: [Reportar problemas](https://github.com/JordiVargasRuiz/safecity-project/issues)
 
