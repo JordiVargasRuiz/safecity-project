@@ -27,7 +27,7 @@
 
 ## 📖 Descripción del Proyecto
 
-**SafeCity Pro** es una plataforma empresarial de monitoreo y gestión de alertas en tiempo real diseñada para instituciones como CUCEI. Proporciona un **centro de comando centralizado** que permite:
+**SafeCity Pro** es una plataforma de monitoreo y gestión de alertas en tiempo real. Proporciona un **centro de comando centralizado** que permite:
 
 - 🎯 Recibir y gestionar múltiples tipos de alertas (robos, accidentes, vandalismo, etc.)
 - 📊 Visualizar incidentes en tiempo real mediante dashboards interactivos
@@ -35,7 +35,7 @@
 - 📱 API RESTful escalable con microservicios
 - ☁️ Despliegue en contenedores y orquestación con Kubernetes
 
-El proyecto está optimizado para el campus de **CUCEI - Guadalajara** y es completamente escalable para múltiples ubicaciones.
+El proyecto está optimizado para el campus de **Guadalajara** y es completamente escalable para múltiples ubicaciones.
 
 ---
 
@@ -95,6 +95,7 @@ El proyecto está optimizado para el campus de **CUCEI - Guadalajara** y es comp
 - Docker y Docker Compose instalados (v20.10+)
 - Python 3.9+ (para desarrollo local)
 - 2GB de RAM mínimo disponible
+<img width="1917" height="400" alt="image" src="https://github.com/user-attachments/assets/d0b441ec-130a-41b1-ab31-6a4cbe2f01b4" />
 
 ### Para Despliegue en Kubernetes:
 - Kubernetes cluster (v1.20+) accesible
@@ -291,7 +292,6 @@ kubectl patch svc frontend-service -p '{"spec":{"type":"LoadBalancer"}}' -n safe
 ```bash
 # Ver estado de pods
 kubectl get pods -n safecity -w
-<img width="584" height="255" alt="image" src="https://github.com/user-attachments/assets/8a80dcff-4baf-41d5-8ead-3ddfc6c296e3" />
 
 
 # Ver logs de un servicio
@@ -303,6 +303,7 @@ kubectl describe pod <pod-name> -n safecity
 # Acceder a shell del contenedor
 kubectl exec -it <pod-name> -n safecity -- /bin/bash
 ```
+<img width="584" height="255" alt="image" src="https://github.com/user-attachments/assets/8a80dcff-4baf-41d5-8ead-3ddfc6c296e3" />
 
 ---
 
