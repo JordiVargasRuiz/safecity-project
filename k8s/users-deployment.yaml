@@ -30,4 +30,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
-  type: LoadBalancer # Esto nos permitirá entrar desde el navegador
+  type: LoadBalancer
