@@ -19,7 +19,7 @@ Esta guía te ayudará a configurar SafeCity Pro en tu máquina local para desar
 ### Paso 1: Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/safecity-project.git
+git clone https://github.com/JordiVargasRuiz/safecity-project.git
 cd safecity-project
 ```
 
@@ -214,176 +214,11 @@ docker-compose down -v
 
 ```bash
 # Frontend
-curl http://localhost
-
-# Alerts Service
-curl http://localhost:8001/docs
-
-# Users Service
-curl http://localhost:8002/docs
+curl http://localhost:8080/
 
 # PostgreSQL
 docker-compose exec postgres psql -U postgres -d safecity_alerts -c "SELECT COUNT(*) FROM alerts;"
 ```
-
----
-
-## 🧪 Testing de APIs
-
-### Con curl
-
-```bash
-# Login
-curl -X POST http://localhost:8002/login \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin&password=admin123"
-
-# Crear alerta
-TOKEN="token-seguro-safecity-2026"
-
-curl -X POST http://localhost:8001/alerts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "tipo": "Robo",
-    "ubicacion": "CUCEI Campus",
-    "descripcion": "Robo en estacionamiento"
-  }'
-
-# Listar alertas
-curl http://localhost:8001/alerts
-
-# Health check
-curl http://localhost:8001/
-```
-
-### Con Postman
-
-1. Importar colección (si existe)
-2. O crear manualmente:
-   - **Login**: POST `http://localhost:8002/login`
-   - **Crear Alerta**: POST `http://localhost:8001/alerts`
-   - **Listar Alertas**: GET `http://localhost:8001/alerts`
-
----
-
-## 🐛 Debugging
-
-### Logs en Desarrollo
-
-```bash
-# Ver logs de un servicio
-docker-compose logs alerts-service
-
-# Tiempo real
-docker-compose logs -f alerts-service
-
-# Últimas 50 líneas
-docker-compose logs --tail 50 alerts-service
-
-# Formato combinado
-docker-compose logs -f --timestamps
-```
-
-### Debugger de Python
-
-En `services/alerts/main.py`:
-
-```python
-import pdb
-
-@app.post("/alerts")
-async def create_alert(incident: dict):
-    pdb.set_trace()  # Se pausará aquí
-    # ... resto del código
-```
-
-Ejecutar con:
-```bash
-python main.py  # sin --reload
-```
-
-### Browser DevTools
-
-1. Abiir Chrome/Firefox
-2. Presionar `F12`
-3. Console, Network, Sources
-4. Inspeccionar tráfico HTTP
-
----
-
-## 📦 Construcción de Imágenes Docker
-
-### Alerts Service
-
-```bash
-docker build -t safecity-alerts:dev ./services/alerts
-docker run -p 8001:8000 -e DATABASE_HOST=host.docker.internal safecity-alerts:dev
-```
-
-### Users Service
-
-```bash
-docker build -t safecity-users:dev ./services/users
-docker run -p 8002:8000 safecity-users:dev
-```
-
-### Frontend
-
-```bash
-docker build -t safecity-frontend:dev ./services/frontend
-docker run -p 80:80 safecity-frontend:dev
-```
-
----
-
-## ⚡ Optimizaciones para Desarrollo
-
-### Hot Reload
-
-```bash
-# FastAPI con uvicorn ya tiene auto-reload
-uvicorn main:app --reload
-
-# Frontend: usar live-server
-npm install -g live-server
-live-server services/frontend/
-```
-
-### Database Migrations (si usas Alembic)
-
-```bash
-# Crear migración
-alembic revision --autogenerate -m "Create alerts table"
-
-# Aplicar
-alembic upgrade head
-
-# Verificar
-alembic current
-```
-
----
-
-## 🔒 Variables Sensibles
-
-### NO Commitar Nunca:
-
-- `.env` (usar `.env.example` en su lugar)
-- Contraseñas hardcodeadas
-- API Keys
-- Tokens
-
-### Template `.env.example`:
-
-```env
-POSTGRES_PASSWORD=SET_THIS
-POSTGRES_DB=safecity_alerts
-POSTGRES_USER=postgres
-DATABASE_HOST=localhost
-```
-
----
 
 ## 📚 Recursos Útiles
 
