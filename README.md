@@ -85,6 +85,7 @@ El proyecto está optimizado para el campus de **CUCEI - Guadalajara** y es comp
 3. **Usuarios autenticado** emite alertas al Alerts Service
 4. **Alerts Service** valida y almacena en PostgreSQL
 5. **Dashboard** recibe actualizaciones en tiempo real
+<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/45507eca-3541-478f-b6cd-2bd2771a4e43" />
 
 ---
 
@@ -198,22 +199,6 @@ docker-compose ps
 
 # Ver logs
 docker-compose logs -f
-```
-
-#### Paso 5: Validar Despliegue
-
-```bash
-# Verificar Frontend
-curl http://localhost
-
-# Verificar Alerts Service
-curl http://localhost:8001/docs
-
-# Verificar Users Service
-curl http://localhost:8002/docs
-
-# Verificar PostgreSQL
-docker exec safecity-project-postgres-1 psql -U postgres -d safecity_alerts -c "SELECT version();"
 ```
 
 ---
@@ -359,7 +344,7 @@ safecity-project/
 ## 🔧 Servicios
 
 ### 1. **Frontend Service** 
-- **Puerto**: 80
+- **Puerto**: 8080
 - **Tecnología**: HTML5, CSS3, Tailwind CSS, JavaScript
 - **Funcionalidad**: Dashboard de monitoreo en tiempo real
 - **Features**:
@@ -368,23 +353,8 @@ safecity-project/
   - Historial de incidentes
   - Clock en tiempo real
 
-### 2. **Alerts Service**
-- **Puerto**: 8001
-- **Tecnología**: FastAPI, Python 3.9+
-- **Endpoints**:
-  - `POST /alerts` - Crear nueva alerta
-  - `GET /alerts` - Listar alertas
-  - `GET /docs` - Documentación Swagger
 
-### 3. **Users Service**
-- **Puerto**: 8002
-- **Tecnología**: FastAPI con OAuth2
-- **Endpoints**:
-  - `POST /login` - Autenticación
-  - `GET /` - Estado del servicio
-  - `GET /docs` - Documentación Swagger
-
-### 4. **PostgreSQL Database**
+### 2. **PostgreSQL Database**
 - **Puerto**: 5432
 - **Database**: `safecity_alerts`
 - **User**: `postgres`
@@ -407,9 +377,6 @@ DATABASE_HOST=postgres-service
 DATABASE_PORT=5432
 FASTAPI_ENV=production
 
-# Frontend
-API_ALERTS_URL=http://alerts-service:8001
-API_USERS_URL=http://users-service:8002
 ```
 
 ### Archivos de Configuración
@@ -424,11 +391,11 @@ API_USERS_URL=http://users-service:8002
 
 ### Accediendo al Dashboard
 
-1. **Local**: `http://localhost`
+1. **Local**: `http://localhost:8080/`
 2. **Kubernetes**: 
    ```bash
    kubectl port-forward svc/frontend-service 80:80 -n safecity
-   # Luego: http://localhost
+   # Luego: http://localhost:8080/
    ```
 
 ### Crear una Alerta
@@ -437,25 +404,7 @@ API_USERS_URL=http://users-service:8002
 2. Seleccionar tipo de incidente (Robo, Accidente, Vandalismo)
 3. Ingresar ubicación
 4. Hacer clic en "Transmitir"
-
-### Testing de APIs
-
-```bash
-# Login (obtener token)
-curl -X POST http://localhost:8002/login \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin&password=admin123"
-
-# Crear Alerta
-curl -X POST http://localhost:8001/alerts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer token-seguro-safecity-2026" \
-  -d '{
-    "tipo": "Robo",
-    "ubicacion": "CUCEI, Guadalajara",
-    "descripcion": "Robo en estacionamiento"
-  }'
-```
+<img width="1919" height="571" alt="image" src="https://github.com/user-attachments/assets/a9157bbc-6a7e-45e7-be7f-5b5ef200bdad" />
 
 ---
 
@@ -526,8 +475,8 @@ Las contribuciones son bienvenidas. Por favor:
 
 ### Contacto
 - 📧 Email: safecity@cucei.udg.mx
-- 🔗 Repositorio: [github.com/tu-usuario/safecity-project](https://github.com)
-- 📱 Issues: [Reportar problemas](https://github.com/tu-usuario/safecity-project/issues)
+- 🔗 Repositorio: [github.com/JordiVargasRuiz/safecity-project](https://github.com)
+- 📱 Issues: [Reportar problemas](https://github.com/JordiVargasRuiz/safecity-project/issues)
 
 ---
 
