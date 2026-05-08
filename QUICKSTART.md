@@ -8,7 +8,7 @@
 
 ### Paso 1: Clonar
 ```bash
-git clone https://github.com/tu-usuario/safecity-project.git
+git clone https://github.com/JordiVargasRuiz/safecity-project.git
 cd safecity-project
 ```
 
@@ -18,12 +18,10 @@ docker-compose up -d
 ```
 
 ### Paso 3: Acceder
-- **Frontend**: http://localhost
-- **API Docs**: http://localhost:8001/docs
-- **Database**: localhost:5432
+- **Frontend**: http://localhost:8080/
 
 ### Paso 4: Crear Alerta
-1. Ir a http://localhost
+1. Ir a http://localhost:8080/
 2. Seleccionar tipo: "Robo"
 3. Ubicación: "CUCEI"
 4. Botón: "Transmitir"
@@ -63,36 +61,9 @@ kubectl port-forward svc/frontend-service 80:80 -n safecity
 | **Visión general** | [README.md](README.md) |
 | **Desarrollo local** | [DEVELOPMENT.md](DEVELOPMENT.md) |
 | **Producción** | [PRODUCTION.md](PRODUCTION.md) |
-| **APIs** | [API.md](API.md) |
 | **Presentación** | [PRESENTATION.md](PRESENTATION.md) |
 | **Problemas** | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) |
 | **Índice completo** | [DOCUMENTATION.md](DOCUMENTATION.md) |
-
----
-
-## 🔌 Testing Rápido
-
-### Login
-```bash
-curl -X POST http://localhost:8002/login \
-  -d "username=admin&password=admin123"
-```
-
-### Crear Alerta
-```bash
-curl -X POST http://localhost:8001/alerts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer token-seguro-safecity-2026" \
-  -d '{
-    "tipo": "Robo",
-    "ubicacion": "CUCEI"
-  }'
-```
-
-### Listar Alertas
-```bash
-curl http://localhost:8001/alerts
-```
 
 ---
 
@@ -123,18 +94,12 @@ kubectl create namespace safecity  # Crear K8s
 
 ## 🆘 Problemas?
 
-### No puedo acceder a http://localhost
+### No puedo acceder a http://localhost:8080/
 ```bash
 docker-compose ps              # Verificar servicios
 docker-compose logs            # Ver logs
 docker-compose down -v
 docker-compose up -d           # Reiniciar
-```
-
-### API devuelve error
-```bash
-curl http://localhost:8001/docs    # Ver documentación
-curl http://localhost:8001/        # Health check
 ```
 
 ### Más problemas?
@@ -144,7 +109,7 @@ curl http://localhost:8001/        # Health check
 
 ## 📞 Contacto
 
-- 📧 Email: safecity@cucei.udg.mx
+- 📧 Email: jordi.vargas3669@alumnos.udg.mx
 - 📖 Docs: [DOCUMENTATION.md](DOCUMENTATION.md)
 - 🐛 Issues: [GitHub Issues](https://github.com/issues)
 
