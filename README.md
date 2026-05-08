@@ -493,7 +493,6 @@ Este proyecto está bajo la licencia MIT. Ver archivo [LICENSE](LICENSE) para m�
 
 - [Guía de Desarrollo Local](DEVELOPMENT.md)
 - [Guía de Producción](PRODUCTION.md)
-- [API Reference](API.md)
 - [Troubleshooting Avanzado](TROUBLESHOOTING.md)
 
 ---
