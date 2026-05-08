@@ -291,6 +291,8 @@ kubectl patch svc frontend-service -p '{"spec":{"type":"LoadBalancer"}}' -n safe
 ```bash
 # Ver estado de pods
 kubectl get pods -n safecity -w
+<img width="584" height="255" alt="image" src="https://github.com/user-attachments/assets/8a80dcff-4baf-41d5-8ead-3ddfc6c296e3" />
+
 
 # Ver logs de un servicio
 kubectl logs -f deployment/alerts-service -n safecity
