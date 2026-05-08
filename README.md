@@ -81,10 +81,9 @@ El proyecto está optimizado para el campus de **Guadalajara** y es completament
 ### Flujo de Datos
 
 1. **Usuario** accede al dashboard frontend
-2. **Frontend** autenticar usuario con Users Service
-3. **Usuarios autenticado** emite alertas al Alerts Service
-4. **Alerts Service** valida y almacena en PostgreSQL
-5. **Dashboard** recibe actualizaciones en tiempo real
+2. **Usuarios** emiten alertas al Alerts Service
+3. **Alerts Service** valida y almacena en PostgreSQL
+4. **Dashboard** recibe actualizaciones en tiempo real
 <img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/45507eca-3541-478f-b6cd-2bd2771a4e43" />
 
 ---
@@ -355,6 +354,7 @@ safecity-project/
   - Formulario de emisión de alertas
   - Historial de incidentes
   - Clock en tiempo real
+<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/c299856b-c3d5-4172-a583-38fd54b89d04" />
 
 
 ### 2. **PostgreSQL Database**
