@@ -9,6 +9,7 @@ SafeCity Pro cuenta con **documentación completa** para todos los usuarios:
   - Descripción general
   - Guía de despliegue (2 opciones)
   - Características y arquitectura
+<img width="1917" height="992" alt="image" src="https://github.com/user-attachments/assets/fb21235a-52fc-48cf-b35b-124a085ea74a" />
 
 ### Para Desarrolladores
 - **[DEVELOPMENT.md](../DEVELOPMENT.md)**
