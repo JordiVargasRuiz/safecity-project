@@ -262,10 +262,16 @@
             });
         }
     </script>
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_CONFIG.key}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+<script>
+        const MAPS_CONFIG = {
+            key: "AIzaSyCIEFQof0In0Gh8nT60zZt6p2jBrM1fHOs"
+        };
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_CONFIG.key}&callback=initMap&libraries=marker,geocoding`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    </script>
 </body>
 </html>
