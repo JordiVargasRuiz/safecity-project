@@ -262,6 +262,10 @@
             });
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOURAPIKEY&callback=initMap" async defer></script>
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_CONFIG.key}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
 </body>
 </html>
