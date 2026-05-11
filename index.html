@@ -22,7 +22,6 @@
             animation: shimmer 1.5s infinite;
         }
 
-        /* Mejora 3: Efecto Vignette para el mapa */
         section.flex-1::after {
             content: "";
             position: absolute;
@@ -34,7 +33,6 @@
 </head>
 <body class="bg-[#0b0f1a] text-slate-200 font-sans h-screen flex flex-col overflow-hidden">
 
-    <!-- Header con Dashboard de Estadísticas (Mejora 3) -->
     <header class="h-20 border-b border-slate-800 glass-panel px-6 flex justify-between items-center z-50">
         <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-cyan-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(8,145,178,0.5)] border border-cyan-400/30">
@@ -46,7 +44,6 @@
             </div>
         </div>
 
-        <!-- Dashboard Rápido -->
         <div class="hidden md:flex gap-8">
             <div class="text-center">
                 <p class="text-[9px] text-slate-500 uppercase font-bold mb-1">Alertas Totales</p>
@@ -81,29 +78,24 @@
                         <option value="Incendio">🔥 Incendio</option>
                     </select>
                     <input id="ubicacion" type="text" placeholder="Ej. CUCEI, Guadalajara" 
-                           class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-3 text-sm outline-none focus:border-cyan-500 placeholder:text-slate-600">
+                           class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-3 text-sm outline-none focus:border-cyan-500 placeholder:text-slate-600 text-white">
                     <button onclick="enviarAlerta()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all transform active:scale-95 shadow-lg">
                         Transmitir Alerta
                     </button>
                 </div>
             </div>
 
-            <!-- Filtros Dinámicos (Mejora 1) -->
             <div class="px-6 py-4 border-b border-slate-800/50 flex gap-2 overflow-x-auto no-scrollbar">
                 <button onclick="filtrarHistorial('todos')" class="filter-btn active text-[9px] font-bold px-3 py-1.5 rounded-full border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 whitespace-nowrap">TODOS</button>
                 <button onclick="filtrarHistorial('Robo')" class="filter-btn text-[9px] font-bold px-3 py-1.5 rounded-full border border-slate-700 bg-slate-900 text-slate-500 whitespace-nowrap">ROBOS</button>
                 <button onclick="filtrarHistorial('Accidente')" class="filter-btn text-[9px] font-bold px-3 py-1.5 rounded-full border border-slate-700 bg-slate-900 text-slate-500 whitespace-nowrap">VIALES</button>
             </div>
 
-            <div id="incident-feed" class="flex-1 p-6 overflow-y-auto space-y-4">
-                <!-- Los items se cargan dinámicamente -->
-            </div>
+            <div id="incident-feed" class="flex-1 p-6 overflow-y-auto space-y-4"></div>
         </aside>
 
         <section class="flex-1 relative">
             <div id="map"></div>
-            
-            <!-- Botón Mi Ubicación (Mejora 2) -->
             <button onclick="miUbicacion()" class="absolute bottom-10 right-10 z-50 bg-slate-900 border border-slate-700 p-4 rounded-full text-cyan-400 hover:bg-cyan-600 hover:text-white transition-all shadow-2xl group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
                 <span class="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-[10px] px-2 py-1 rounded border border-slate-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap tracking-widest font-black">LOCALIZAR MI POSICIÓN</span>
@@ -125,7 +117,8 @@
         ];
 
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            const clock = document.getElementById('clock');
+            if(clock) clock.innerText = new Date().toLocaleTimeString();
         }, 1000);
 
         function showToast(mensaje, tipo = 'success') {
@@ -155,7 +148,6 @@
             cargarHistorial();
         }
 
-        // Mejora 2: Localización Real
         function miUbicacion() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -167,15 +159,11 @@
             }
         }
 
-        // Mejora 1: Filtrado
         function filtrarHistorial(tipo) {
-            // Actualizar UI botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.replace('bg-cyan-500/10', 'bg-slate-900');
-                btn.classList.replace('text-cyan-400', 'text-slate-500');
-                btn.classList.replace('border-cyan-500/50', 'border-slate-700');
+                btn.className = "filter-btn text-[9px] font-bold px-3 py-1.5 rounded-full border border-slate-700 bg-slate-900 text-slate-500 whitespace-nowrap";
             });
-            event.target.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/50');
+            event.target.className = "filter-btn active text-[9px] font-bold px-3 py-1.5 rounded-full border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 whitespace-nowrap";
             
             const filtradas = tipo === 'todos' ? todasLasAlertas : todasLasAlertas.filter(a => a.tipo === tipo);
             renderizarFeed(filtradas);
@@ -183,17 +171,21 @@
 
         function actualizarStats(alertas) {
             document.getElementById('stat-total').innerText = alertas.length.toString().padStart(2, '0');
-            const counts = alertas.reduce((acc, a) => { acc[a.tipo] = (acc[a.tipo] || 0) + 1; return acc; }, {});
-            const common = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b, "--");
-            document.getElementById('stat-common').innerText = common.toUpperCase();
+            if(alertas.length > 0) {
+                const counts = alertas.reduce((acc, a) => { acc[a.tipo] = (acc[a.tipo] || 0) + 1; return acc; }, {});
+                const common = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b, "--");
+                document.getElementById('stat-common').innerText = common.toUpperCase();
+            }
         }
 
         async function cargarHistorial() {
             const feed = document.getElementById('incident-feed');
-            feed.innerHTML = `${[1,2,3].map(() => `<div class="skeleton h-24 w-full rounded-xl mb-4 border border-slate-800/50"></div>`).join('')}`;
+            feed.innerHTML = [1,2,3].map(() => `<div class="skeleton h-24 w-full rounded-xl mb-4 border border-slate-800/50"></div>`).join('');
 
             try {
-                const res = await fetch(API_BACKEND);
+                const res = await fetch(API_BACKEND, {
+                    headers: { "ngrok-skip-browser-warning": "true" }
+                });
                 todasLasAlertas = await res.json();
                 actualizarStats(todasLasAlertas);
                 renderizarFeed(todasLasAlertas);
@@ -205,7 +197,6 @@
             feed.innerHTML = "";
             const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
             
-            // Limpiar marcadores viejos
             markers.forEach(m => m.map = null);
             markers = [];
 
@@ -227,7 +218,7 @@
                 item.innerHTML = `
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-[10px] font-black text-cyan-400 uppercase group-hover:text-cyan-300">${a.tipo}</span>
-                        <span class="text-[9px] font-mono text-slate-600">${a.fecha}</span>
+                        <span class="text-[9px] font-mono text-slate-600">${a.fecha || ''}</span>
                     </div>
                     <p class="text-[11px] text-slate-400 group-hover:text-slate-200 leading-tight">${a.ubicacion}</p>
                 `;
@@ -249,7 +240,11 @@
                     try {
                         const response = await fetch(API_BACKEND, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer token-safecity' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer token-safecity',
+                                'ngrok-skip-browser-warning': 'true'
+                            },
                             body: JSON.stringify({ tipo, ubicacion, lat, lon })
                         });
                         if (response.ok) {
@@ -262,11 +257,8 @@
             });
         }
     </script>
-<script>
-        const MAPS_CONFIG = {
-            key: "AIzaSyCIEFQof0In0Gh8nT60zZt6p2jBrM1fHOs"
-        };
-
+    <script>
+        const MAPS_CONFIG = { key: "AIzaSyCIEFQof0In0Gh8nT60zZt6p2jBrM1fHOs" };
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_CONFIG.key}&callback=initMap&libraries=marker,geocoding`;
         script.async = true;
