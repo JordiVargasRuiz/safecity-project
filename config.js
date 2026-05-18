@@ -1,3 +1,3 @@
 const MAPS_CONFIG = {
-    key: "AIzaSyB43SMdi1BbaXbakKjMpIAzq9kEBsP9DHM"
+    key: "AIzaSyCIEFQof0In0Gh8nT60zZt6p2jBrM1fHOs"
 };
