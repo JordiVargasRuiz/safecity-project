@@ -22,7 +22,6 @@
             animation: shimmer 1.5s infinite;
         }
 
-        /* Mejora 3: Efecto Vignette para el mapa */
         section.flex-1::after {
             content: "";
             position: absolute;
@@ -34,7 +33,6 @@
 </head>
 <body class="bg-[#0b0f1a] text-slate-200 font-sans h-screen flex flex-col overflow-hidden">
 
-    <!-- Header con Dashboard de Estadísticas (Mejora 3) -->
     <header class="h-20 border-b border-slate-800 glass-panel px-6 flex justify-between items-center z-50">
         <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-cyan-600 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(8,145,178,0.5)] border border-cyan-400/30">
@@ -46,7 +44,6 @@
             </div>
         </div>
 
-        <!-- Dashboard Rápido -->
         <div class="hidden md:flex gap-8">
             <div class="text-center">
                 <p class="text-[9px] text-slate-500 uppercase font-bold mb-1">Alertas Totales</p>
@@ -88,7 +85,6 @@
                 </div>
             </div>
 
-            <!-- Filtros Dinámicos (Mejora 1) -->
             <div class="px-6 py-4 border-b border-slate-800/50 flex gap-2 overflow-x-auto no-scrollbar">
                 <button onclick="filtrarHistorial('todos')" class="filter-btn active text-[9px] font-bold px-3 py-1.5 rounded-full border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 whitespace-nowrap">TODOS</button>
                 <button onclick="filtrarHistorial('Robo')" class="filter-btn text-[9px] font-bold px-3 py-1.5 rounded-full border border-slate-700 bg-slate-900 text-slate-500 whitespace-nowrap">ROBOS</button>
@@ -96,14 +92,12 @@
             </div>
 
             <div id="incident-feed" class="flex-1 p-6 overflow-y-auto space-y-4">
-                <!-- Los items se cargan dinámicamente -->
             </div>
         </aside>
 
         <section class="flex-1 relative">
             <div id="map"></div>
             
-            <!-- Botón Mi Ubicación (Mejora 2) -->
             <button onclick="miUbicacion()" class="absolute bottom-10 right-10 z-50 bg-slate-900 border border-slate-700 p-4 rounded-full text-cyan-400 hover:bg-cyan-600 hover:text-white transition-all shadow-2xl group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
                 <span class="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-[10px] px-2 py-1 rounded border border-slate-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap tracking-widest font-black">LOCALIZAR MI POSICIÓN</span>
@@ -155,7 +149,6 @@
             cargarHistorial();
         }
 
-        // Mejora 2: Localización Real
         function miUbicacion() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -167,9 +160,7 @@
             }
         }
 
-        // Mejora 1: Filtrado
         function filtrarHistorial(tipo) {
-            // Actualizar UI botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.replace('bg-cyan-500/10', 'bg-slate-900');
                 btn.classList.replace('text-cyan-400', 'text-slate-500');
@@ -205,7 +196,6 @@
             feed.innerHTML = "";
             const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
             
-            // Limpiar marcadores viejos
             markers.forEach(m => m.map = null);
             markers = [];
 

@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages with Secrets
 on:
   push:
     branches:
-      - main  # O master, según cómo se llame tu rama principal
+      - main
 
 permissions:
   contents: read
