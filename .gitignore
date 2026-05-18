@@ -1,4 +1,4 @@
-frontend/config.js
+config.js
 .env
 __pycache__/
 *.pyc
