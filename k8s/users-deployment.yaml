@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: users
-        image: users-service:vfinal  #La imagen que construiremos con Docker
-        imagePullPolicy: IfNotPresent
+        image: docker.io/library/users-service:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
 ---

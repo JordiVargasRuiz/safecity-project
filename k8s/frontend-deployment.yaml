@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: safecity-frontend:v1
-        imagePullPolicy: IfNotPresent
+        image: docker.io/library/frontend-service:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
 ---

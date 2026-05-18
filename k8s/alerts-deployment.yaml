@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: alerts
-        image: alerts-service:v5
-        imagePullPolicy: IfNotPresent
+        image: docker.io/library/alerts-service:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
 ---
